@@ -4,6 +4,9 @@ import "./globals.css"; // Tetap di-import di sini ya Bang!
 import { cookies } from "next/headers"; // 1. Ambil fungsi membaca cookie dari Next.js
 import NavbarMenu from "./NavbarMenu"; // 2. Kita import menu dinamis yang akan kita buat di bawah
 
+// SOLUSI UTAMA FIX VERCEL 500: Memaksa Next.js memperlakukan seluruh rute sebagai Dynamic Server Rendered
+export const dynamic = "force-dynamic";
+
 const poppins = Poppins({ 
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"] 
@@ -17,13 +20,12 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   let isLoggedIn = false;
 
-  // BLOK PENGAMAN: Mencegah Vercel Crash 500 jika cookie belum terbentuk sama sekali di browser
   try {
     const cookieStore = await cookies();
     isLoggedIn = cookieStore.has("auth_session");
   } catch (error) {
     console.error("Gagal membaca cookie di server production:", error);
-    isLoggedIn = false; // Jika error/kosong, paksa set status belum login secara aman
+    isLoggedIn = false; 
   }
 
   return (
