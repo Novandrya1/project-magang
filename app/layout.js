@@ -15,9 +15,16 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  // 3. Cek apakah ada cookie session aktif di browser
-  const cookieStore = await cookies();
-  const isLoggedIn = cookieStore.has("auth_session");
+  let isLoggedIn = false;
+
+  // BLOK PENGAMAN: Mencegah Vercel Crash 500 jika cookie belum terbentuk sama sekali di browser
+  try {
+    const cookieStore = await cookies();
+    isLoggedIn = cookieStore.has("auth_session");
+  } catch (error) {
+    console.error("Gagal membaca cookie di server production:", error);
+    isLoggedIn = false; // Jika error/kosong, paksa set status belum login secara aman
+  }
 
   return (
     <html lang="id" className="bg-white text-slate-800">
@@ -27,7 +34,7 @@ export default async function RootLayout({ children }) {
         <nav className="bg-white border-b border-gray-100 py-4 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-6 flex justify-between items-center bg-white">
             
-            {/* PERBAIKAN LOGIKA UTAMA: Jika sudah login arahkan ke /dashboard, jika belum lari ke / */}
+            {/* LOGIKA UTAMA: Jika sudah login arahkan ke /dashboard, jika belum lari ke / */}
             <a 
               href={isLoggedIn ? "/dashboard" : "/"} 
               className="text-xl font-bold tracking-tight text-slate-900 bg-white hover:opacity-80 transition-opacity"
