@@ -283,7 +283,7 @@ export default function DashboardPelanggan() {
       {/* FITUR BARU: FLOATING CHAT ADMIN WHATSAPP (STANDARD UX EXCELLENCE)    */}
       {/* ==================================================================== */}
       <a 
-        href={`https://wa.me/${profile.noHp}?text=Halo%20Admin%20JasaLaundry,%20saya%20ingin%20bertanya%20mengenai%20status%20penjemputan%20laundry%20saya.`}
+        href="https://wa.me/6285854484333?text=Halo%20Admin%20JasaLaundry,%20saya%20ingin%20bertanya%20mengenai%20status%20penjemputan%20laundry%20saya."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center group z-50"
@@ -299,7 +299,6 @@ export default function DashboardPelanggan() {
         </span>
       </a>
       {/* ==================================================================== */}
-
     </div>
   );
 }
