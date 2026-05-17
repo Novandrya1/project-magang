@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cuci-komplit",
+    "nama": "Cuci Komplit Reguler",
+    "harga": "Rp 7.000 / kg",
+    "hargaAngka": 7000,
+    "satuan": "kg",
+    "eksklusif": false,
+    "deskripsi": "Layanan laundry kiloan reguler (cuci, kering, setrika uap, lipat) dengan estimasi selesai 2-3 hari. Cocok untuk pakaian harian Anda. Menggunakan 1 mesin khusus untuk 1 pelanggan agar higienis bebas tertukar."
+  },
+  {
+    "id": "deep-cleaning-sepatu",
+    "nama": "Deep Cleaning Sepatu & Tas",
+    "harga": "Rp 45.000 / pasang",
+    "hargaAngka": 45000,
+    "satuan": "pasang",
+    "eksklusif": false,
+    "deskripsi": "Pencucian premium khusus sepatu (canvas, suede, leather) dan tas secara manual menggunakan cairan pembersih khusus anti-rusak. Mengembalikan kesegaran warna dan mematikan jamur hingga ke serat terdalam."
+  },
+  {
+    "id": "executive-care",
+    "nama": "Executive Care (Butik)",
+    "harga": "Rp 15.000 / pcs",
+    "hargaAngka": 15000,
+    "satuan": "pcs",
+    "eksklusif": false,
+    "deskripsi": "Penanganan premium per helai pakaian untuk jas, gaun pesta, batik tulis, kebaya, atau kain sutra. Menggunakan metode handwash atau dry-clean khusus serta setrika uap presisi agar serat kain mahal tetap terjaga sempurna."
+  },
+  {
+    "id": "langganan-member-30kg",
+    "nama": "Paket Langganan Bulanan (30 Kg)",
+    "harga": "Rp 150.000 / paket",
+    "hargaAngka": 150000,
+    "satuan": "paket",
+    "eksklusif": true,
+    "deskripsi": "Sistem Kuota Saldo Bulanan hemat khusus member! Anda membeli saldo kuota 30 Kg di awal dengan harga super murah. Pengambilan baju kotor bebas dicicil berkali-kali kapan saja (misal: jemput 5 kg dulu minggu ini) sampai kuota 30 Kg Anda habis terpakai dalam 30 hari."
+  }
+]
