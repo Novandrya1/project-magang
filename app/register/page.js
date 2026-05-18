@@ -45,7 +45,7 @@ export default function Register() {
       return;
     }
 
-    // 2. LOGIKA AUTO-LOGIN: Jika pendaftaran sukses, langsung panggil signInWithPassword
+    // 2. LOGIKA AUTO-LOGIN: Langsung panggil signInWithPassword
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -54,14 +54,22 @@ export default function Register() {
     setLoading(false);
 
     if (signInError) {
-      // Jika auto-login gagal (jarang terjadi kalau regis sukses), arahkan manual ke login biasa
       window.location.href = "/login";
     } else {
-      // 3. Pasang token akses asli dari Supabase ke cookie agar lolos dari Middleware rute /dashboard
+      // 3. Pasang token akses asli dari Supabase ke cookie
       const sessionToken = signInData.session.access_token;
-      document.cookie = `auth_session=${sessionToken}; path=/; max-age=86400;`; // Berlaku 1 hari
+      document.cookie = `auth_session=${sessionToken}; path=/; max-age=86400;`; 
       
-      // 4. Langsung tembus masukkan user ke dashboard pelanggan secara instan!
+      // 4. SIMPAN SEMUA DATA KE LOCALSTORAGE AGAR SYNC KE DASHBOARD & NAVBAR
+      localStorage.setItem("nama_lengkap", nama);
+      localStorage.setItem("email_user", email);
+      localStorage.setItem("noHp_user", noHp);
+      localStorage.setItem("alamat_user", alamat);
+      
+      // Hapus data modifikasi form lama jika ada sisa testing sebelumnya
+      localStorage.removeItem("profil_user_laundry");
+
+      // 5. Lempar user ke dashboard pelanggan secara instan
       window.location.href = "/dashboard";
     }
   };

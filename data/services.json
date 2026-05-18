@@ -27,6 +27,42 @@
     "deskripsi": "Penanganan premium per helai pakaian untuk jas, gaun pesta, batik tulis, kebaya, atau kain sutra. Menggunakan metode handwash atau dry-clean khusus serta setrika uap presisi agar serat kain mahal tetap terjaga sempurna."
   },
   {
+    "id": "cuci-bedcover",
+    "nama": "Cuci Bedcover & Selimut",
+    "harga": "Rp 35.000 / pcs",
+    "hargaAngka": 35000,
+    "satuan": "pcs",
+    "eksklusif": false,
+    "deskripsi": "Pencucian khusus untuk bedcover ukuran King/Queen atau selimut bulu tebal. Menggunakan deterjen khusus anti-tungau dan dikeringkan merata agar tidak menggumpal."
+  },
+  {
+    "id": "cuci-express",
+    "nama": "Cuci Komplit Express (1 Hari)",
+    "harga": "Rp 11.000 / kg",
+    "hargaAngka": 11000,
+    "satuan": "kg",
+    "eksklusif": true,
+    "deskripsi": "Butuh pakaian bersih secepatnya? Layanan express 24 jam selesai. Cuci, kering, setrika uap, langsung diantar kembali ke depan pintu rumah Anda."
+  },
+  {
+    "id": "cuci-kilat",
+    "nama": "Cuci Komplit Kilat (6 Jam)",
+    "harga": "Rp 16.000 / kg",
+    "hargaAngka": 16000,
+    "satuan": "kg",
+    "eksklusif": true,
+    "deskripsi": "Layanan super kilat selesai dalam waktu 6 jam saja! Sangat cocok untuk kondisi darurat atau agenda mendadak yang tidak bisa ditunda."
+  },
+  {
+    "id": "langganan-member-15kg",
+    "nama": "Paket Langganan Mahasiswa (15 Kg)",
+    "harga": "Rp 85.000 / paket",
+    "hargaAngka": 85000,
+    "satuan": "paket",
+    "eksklusif": true,
+    "deskripsi": "Sistem kuota bulanan hemat! Beli kuota 15 Kg di awal dengan harga miring, pakaian kotor bisa dicicil kurir berkali-kali selama masa aktif 30 hari masih tersedia."
+  },
+  {
     "id": "langganan-member-30kg",
     "nama": "Paket Langganan Bulanan (30 Kg)",
     "harga": "Rp 150.000 / paket",

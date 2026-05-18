@@ -1,26 +1,39 @@
+// File: app/NavbarMenu.jsx
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NavbarMenu({ isLoggedIn }) {
-  // State untuk mengontrol buka/tutup menu di HP
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState("Pelanggan");
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const savedName = localStorage.getItem("nama_lengkap"); 
+      if (savedName) {
+        setUserName(savedName);
+      }
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
-    // Hapus cookie simulasi
     document.cookie = "auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-    setIsOpen(false); // Tutup menu pas logout di HP
+    localStorage.removeItem("nama_lengkap");
+    localStorage.removeItem("email_user");
+    localStorage.removeItem("noHp_user");
+    localStorage.removeItem("alamat_user");
+    localStorage.removeItem("profil_user_laundry");
     
-    // Alihkan user kembali ke halaman login
+    setIsOpen(false); 
     window.location.href = "/login";
   };
 
+  const userInitial = userName.charAt(0).toUpperCase();
+
   return (
     <>
-      {/* ========================================= */}
-      {/* 1. TAMPILAN DESKTOP (Sembunyi di HP)        */}
-      {/* ========================================= */}
+      {/* 1. TAMPILAN DESKTOP (Makin Clean ala Web App) */}
       <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500 bg-white">
         {!isLoggedIn ? (
           <>
@@ -37,23 +50,15 @@ export default function NavbarMenu({ isLoggedIn }) {
           </>
         ) : (
           <>
-            <Link href="/services" className="text-slate-600 hover:text-blue-600 transition-colors text-xs font-semibold">
-              Katalog Layanan
-            </Link>
-
-            <Link href="/dashboard" className="text-blue-600 font-bold tracking-wide text-xs">
-              Dashboard Pelanggan
-            </Link>
-            
-            {/* AVATAR DESKTOP (Tetap dipertahankan untuk layar lebar) */}
+            {/* Navigasi Katalog & Dashboard dihapus dari Desktop, fokus ke Avatar & Logout saja */}
             <Link 
               href="/dashboard" 
               className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 hover:border-blue-300 px-2.5 py-1.5 rounded-xl transition-all"
             >
               <div className="w-5 h-5 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold rounded-full flex items-center justify-center text-[10px]">
-                N
+                {userInitial}
               </div>
-              <span className="text-[11px] text-slate-700 font-bold">Novandrya</span>
+              <span className="text-[11px] text-slate-700 font-bold">{userName}</span>
             </Link>
 
             <button 
@@ -69,9 +74,7 @@ export default function NavbarMenu({ isLoggedIn }) {
         )}
       </div>
 
-      {/* ========================================= */}
-      {/* 2. TOMBOL HAMBURGER MOBILE (Sembunyi di PC) */}
-      {/* ========================================= */}
+      {/* 2. TOMBOL HAMBURGER MOBILE */}
       <button 
         className="md:hidden p-2 -mr-2 text-slate-600 hover:text-blue-600 focus:outline-none transition-transform"
         onClick={() => setIsOpen(!isOpen)}
@@ -88,9 +91,7 @@ export default function NavbarMenu({ isLoggedIn }) {
         )}
       </button>
 
-      {/* ========================================= */}
-      {/* 3. MENU DROPDOWN MOBILE (Muncul pas diklik) */}
-      {/* ========================================= */}
+      {/* 3. MENU DROPDOWN MOBILE */}
       {isOpen && (
         <div className="absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl md:hidden flex flex-col px-6 py-5 gap-4 z-50">
           {!isLoggedIn ? (
@@ -109,12 +110,8 @@ export default function NavbarMenu({ isLoggedIn }) {
             </>
           ) : (
             <>
-              {/* BAGIAN AVATAR MOBILE SUDAH DIHAPUS SEPENUHNYA AGAR TAMPILAN LEBIH LEGA */}
-              <Link href="/services" onClick={() => setIsOpen(false)} className="text-sm font-semibold text-slate-600 hover:text-blue-600 border-b border-gray-50 pb-3">
-                Katalog Layanan
-              </Link>
               <Link href="/dashboard" onClick={() => setIsOpen(false)} className="text-sm font-bold text-blue-600 border-b border-gray-50 pb-3">
-                Dashboard Pelanggan
+                Dashboard & Pesanan Saya
               </Link>
               
               <button 

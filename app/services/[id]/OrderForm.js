@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation"; // Import params untuk membaca ID dari URL langsung
-import Link from "next/link"; // Pastikan Link di-import dengan benar
+import { useParams } from "next/navigation"; 
+import Link from "next/link"; 
 
 export default function OrderForm({ item }) {
-  const params = useParams(); // Mengambil ID dari URL (misal: cuci-komplit, deep-cleaning-sepatu)
+  const params = useParams(); 
   const idLayanan = params?.id || "";
 
   const [errorValidasi, setErrorValidasi] = useState("");
@@ -16,9 +16,10 @@ export default function OrderForm({ item }) {
 
   // LOGIKA ABSOLUT: Tentukan harga & satuan berdasarkan ID layanan di URL secara aman
   let serviceNama = item?.nama || "Layanan Laundry";
-  let hargaSatuan = 0;
-  let satuan = "kg";
+  let hargaSatuan = item?.hargaAngka || 7000;
+  let satuan = item?.satuan || "kg";
 
+  // Mapping ID baru agar sinkron dengan database JSON
   if (idLayanan === "cuci-komplit") {
     serviceNama = "Cuci Komplit Reguler";
     hargaSatuan = 7000;
@@ -31,19 +32,31 @@ export default function OrderForm({ item }) {
     serviceNama = "Executive Care (Butik)";
     hargaSatuan = 15000;
     satuan = "pcs";
-  } else if (idLayanan === "langganan-member-30kg" || idLayanan.includes("family") || idLayanan.includes("sub")) {
-    serviceNama = item?.nama || "Paket Langganan Bulanan";
-    hargaSatuan = 150000; // Mengunci harga flat paket
-    satuan = "paket";
-  } else {
-    // Fallback cadangan jika menggunakan ID lain
-    hargaSatuan = 7000;
+  } else if (idLayanan === "cuci-bedcover") {
+    serviceNama = "Cuci Bedcover & Selimut";
+    hargaSatuan = 35000;
+    satuan = "pcs";
+  } else if (idLayanan === "cuci-express") {
+    serviceNama = "Cuci Komplit Express (1 Hari)";
+    hargaSatuan = 11000;
     satuan = "kg";
+  } else if (idLayanan === "cuci-kilat") {
+    serviceNama = "Cuci Komplit Kilat (6 Jam)";
+    hargaSatuan = 16000;
+    satuan = "kg";
+  } else if (idLayanan === "langganan-member-15kg") {
+    serviceNama = "Paket Langganan Mahasiswa (15 Kg)";
+    hargaSatuan = 85000;
+    satuan = "paket";
+  } else if (idLayanan === "langganan-member-30kg" || idLayanan.includes("family") || idLayanan.includes("sub")) {
+    serviceNama = item?.nama || "Paket Langganan Bulanan (30 Kg)";
+    hargaSatuan = 150000; 
+    satuan = "paket";
   }
 
   const apakahPaketKuota = satuan === "paket";
 
-  // LOGIKA MATEMATIKA LIVE PREVIEW (Pasti Akurat, Real-time, & Anti Rp 0)
+  // LOGIKA MATEMATIKA LIVE PREVIEW
   const beratAngka = parseFloat(jumlahInput) || 0;
   const estimasiTotal = apakahPaketKuota ? hargaSatuan : beratAngka * hargaSatuan;
 
@@ -81,11 +94,10 @@ export default function OrderForm({ item }) {
       return;
     }
 
-    // Kunci nilai nominal final untuk struk resmi
     const totalBayarFinal = apakahPaketKuota ? hargaSatuan : jumlahValid * hargaSatuan;
 
     // ====================================================================
-    // LOGIKA TITIPAN: REKAM DATA KE LOCALSTORAGE UNTUK DASHBOARD REAL-TIME
+    // REKAM DATA KE LOCALSTORAGE UNTUK DASHBOARD REAL-TIME
     // ====================================================================
     const pesananBaru = {
       notaId: `JL-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -94,17 +106,19 @@ export default function OrderForm({ item }) {
       satuan: apakahPaketKuota ? "Kg (Cicilan)" : satuan,
       totalBayar: totalBayarFinal,
       metode: metode.toUpperCase(),
+      namaKontak: namaKontak,       // Disimpan agar modal dashboard bisa panggil
+      alamatSpesifik: alamat,       // Disimpan agar modal dashboard bisa panggil
       tanggal: new Date().toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' }),
-      status: "Menunggu Kurir"
+      status: "Menunggu Kurir",
+      kurir: "Budi Santoso"         // Fallback kurir dummy bawaan
     };
     
-    // Ambil riwayat lama dari memori browser, gabung, lalu timpa balik
     const riwayatLama = JSON.parse(localStorage.getItem("riwayat_laundry") || "[]");
     localStorage.setItem("riwayat_laundry", JSON.stringify([pesananBaru, ...riwayatLama]));
     // ====================================================================
 
     setNotaSukses({
-      notaId: pesananBaru.notaId, // Samakan ID dengan data yang masuk dashboard
+      notaId: pesananBaru.notaId, 
       layanan: serviceNama,
       namaKontak: namaKontak,
       noHp: noHpAktif,
@@ -121,7 +135,6 @@ export default function OrderForm({ item }) {
     e.target.reset();
   };
 
-  // TAMPILAN 1: NOTA DIGITAL JIKA ORDER SUKSES
   if (isSukses) {
     return (
       <div className="text-center py-4 px-2 bg-white">
@@ -165,7 +178,13 @@ export default function OrderForm({ item }) {
             : "Nominal di atas adalah biaya sementara berdasarkan input perkiraan Anda. Berat final yang sah akan dihitung ulang menggunakan timbangan digital Admin toko secara transparan."}
         </p>
 
-        {/* LINK NAVIGASI BALIK KE LAYANAN */}
+        <Link 
+          href="/dashboard?tab=aktif"
+          className="block w-full text-center bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs hover:bg-blue-700 transition-colors shadow-sm mb-2"
+        >
+          Lihat di Dashboard Lacak
+        </Link>
+        
         <Link 
           href="/services"
           className="block w-full text-center bg-slate-100 text-slate-700 font-medium py-2 rounded-lg text-xs hover:bg-slate-200 transition-colors"
@@ -176,7 +195,6 @@ export default function OrderForm({ item }) {
     );
   }
 
-  // TAMPILAN 2: FORM UTAMA INPUT DATA
   return (
     <div>
       <h2 className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-gray-50">
@@ -195,10 +213,7 @@ export default function OrderForm({ item }) {
             Nama Kontak di Lokasi
           </label>
           <input 
-            type="text" 
-            name="namaKontak"
-            required
-            placeholder="Nama penerima baju..."
+            type="text" name="namaKontak" required placeholder="Nama penerima baju..."
             className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs"
           />
         </div>
@@ -208,10 +223,7 @@ export default function OrderForm({ item }) {
             Nomor HP / WhatsApp Aktif
           </label>
           <input 
-            type="tel" 
-            name="noHpAktif"
-            required
-            placeholder="Contoh: 08585448xxx"
+            type="tel" name="noHpAktif" required placeholder="Contoh: 08585448xxx"
             className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs"
           />
         </div>
@@ -221,11 +233,7 @@ export default function OrderForm({ item }) {
             {apakahPaketKuota ? "Jumlah Diambil Kurir Hari Ini (Kg)" : `Perkiraan Jumlah (${satuan})`}
           </label>
           <input 
-            type="number" 
-            name="jumlah"
-            required
-            value={jumlahInput}
-            onChange={(e) => setJumlahInput(e.target.value)}
+            type="number" name="jumlah" required value={jumlahInput} onChange={(e) => setJumlahInput(e.target.value)}
             placeholder={apakahPaketKuota ? "Misal: 5" : `Masukkan angka...`}
             className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs"
           />
@@ -241,10 +249,7 @@ export default function OrderForm({ item }) {
             Titik Alamat Penjemputan
           </label>
           <textarea 
-            name="alamat"
-            required
-            rows="2" 
-            placeholder="Tuliskan alamat lengkap penjemputan baju..."
+            name="alamat" required rows="2" placeholder="Tuliskan alamat lengkap penjemputan baju..."
             className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs resize-none"
           ></textarea>
         </div>
@@ -253,16 +258,12 @@ export default function OrderForm({ item }) {
           <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
             Metode Pembayaran
           </label>
-          <select 
-            name="metode"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs"
-          >
+          <select name="metode" className="w-full px-3 py-2 rounded-lg border border-gray-200 text-slate-800 bg-white focus:outline-none focus:border-blue-600 text-xs">
             <option value="cod">COD (Bayar Tunai Saat Diantar)</option>
             <option value="transfer">Transfer Bank (QRIS / Manual)</option>
           </select>
         </div>
 
-        {/* LIVE TOTAL ESTIMASI HARGA */}
         <div className="p-3 bg-blue-50/60 border border-blue-100 rounded-xl">
           <div className="flex justify-between items-center text-xs">
             <span className="text-slate-500 font-light">
@@ -274,10 +275,7 @@ export default function OrderForm({ item }) {
           </div>
         </div>
 
-        <button 
-          type="submit"
-          className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg text-xs hover:bg-blue-700 transition-colors shadow-sm mt-1"
-        >
+        <button type="submit" className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg text-xs hover:bg-blue-700 transition-colors shadow-sm mt-1">
           Pesan & Panggil Kurir Jemput
         </button>
       </form>
