@@ -29,17 +29,20 @@ export default async function RootLayout({ children }) {
   }
 
   return (
-    <html lang="id" className="bg-white text-slate-800">
-      <body className={`${poppins.className} bg-white text-slate-800 min-h-screen flex flex-col`}>
+    // Tambahkan scroll-smooth untuk UX yang lebih elegan
+    <html lang="id" className="bg-white text-slate-800 scroll-smooth">
+      {/* KUNCI RESPONSIVE: Tambahkan w-full dan overflow-x-hidden agar layar HP tidak bocor ke samping */}
+      <body className={`${poppins.className} bg-white text-slate-800 min-h-screen flex flex-col w-full overflow-x-hidden`}>
         
-        {/* NAVBAR */}
-        <nav className="bg-white border-b border-gray-100 py-4 sticky top-0 z-50">
-          <div className="max-w-5xl mx-auto px-6 flex justify-between items-center bg-white">
+        {/* NAVBAR: py-3 di HP, py-4 di Desktop biar pas */}
+        <nav className="bg-white border-b border-gray-100 py-3 sm:py-4 sticky top-0 z-50 w-full">
+          {/* Padding px-4 di HP, px-6 di Desktop */}
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex justify-between items-center bg-white w-full">
             
-            {/* LOGIKA UTAMA: Jika sudah login arahkan ke /dashboard, jika belum lari ke / */}
+            {/* LOGIKA UTAMA: Teks ukuran lg di HP, xl di Desktop, truncate mencegah teks turun baris */}
             <a 
               href={isLoggedIn ? "/dashboard" : "/"} 
-              className="text-xl font-bold tracking-tight text-slate-900 bg-white hover:opacity-80 transition-opacity"
+              className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 bg-white hover:opacity-80 transition-opacity truncate"
             >
               Jasa<span className="text-blue-600">Laundry</span>.
             </a>
@@ -49,14 +52,14 @@ export default async function RootLayout({ children }) {
           </div>
         </nav>
 
-        {/* KONTEN UTAMA */}
-        <main className="flex-grow bg-white">
+        {/* KONTEN UTAMA: Dikunci w-full dan overflow-hidden juga */}
+        <main className="flex-grow bg-white w-full overflow-x-hidden">
           {children}
         </main>
 
         {/* FOOTER */}
-        <footer className="border-t border-gray-100 py-8 bg-white">
-          <div className="max-w-5xl mx-auto px-6 text-center text-sm text-slate-400 font-light bg-white">
+        <footer className="border-t border-gray-100 py-8 bg-white w-full">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs sm:text-sm text-slate-400 font-light bg-white">
             <p>&copy; 2026 JasaLaundry.id. Hak cipta dilindungi.</p>
           </div>
         </footer>
